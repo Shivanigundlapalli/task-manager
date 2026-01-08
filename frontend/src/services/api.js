@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/tasks",
+  baseURL: "https://task-manager-lerp.onrender.com/api/tasks",
 });
 
 export const fetchTasks = () => API.get("/");
