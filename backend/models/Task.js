@@ -11,6 +11,11 @@ const taskSchema = new mongoose.Schema(
       type: Boolean, 
       default: false 
     },
+    sessionId: {
+      type: String,
+      required: true,
+      index: true
+    }
   },
   { 
     timestamps: true 

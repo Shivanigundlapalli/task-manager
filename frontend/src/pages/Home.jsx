@@ -14,21 +14,21 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        setLoading(true);
-        const res = await fetchTasks();
-        setTasks(res.data);
-        setError(null);
-      } catch (err) {
-        setError("Failed to load tasks");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadTasks = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetchTasks();
+      setTasks(res.data);
+    } catch (err) {
+      setError(err.message || "Failed to load tasks. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadTasks();
   }, []);
 
@@ -38,7 +38,7 @@ function Home() {
       setTasks((prev) => [res.data, ...prev]);
       setError(null);
     } catch (err) {
-      setError("Failed to add task");
+      setError(err.message || "Failed to add task. Please try again.");
       console.error(err);
     }
   };
@@ -51,7 +51,7 @@ function Home() {
       );
       setError(null);
     } catch (err) {
-      setError("Failed to update task");
+      setError(err.message || "Failed to update task. Please try again.");
       console.error(err);
     }
   };
@@ -62,7 +62,7 @@ function Home() {
       setTasks((prev) => prev.filter((t) => t._id !== id));
       setError(null);
     } catch (err) {
-      setError("Failed to delete task");
+      setError(err.message || "Failed to delete task. Please try again.");
       console.error(err);
     }
   };
@@ -81,7 +81,14 @@ function Home() {
           <h1>Task Manager</h1>
         </div>
 
-        {error && <div className="error">{error}</div>}
+        {error && (
+          <div className="error">
+            <div className="error-content">{error}</div>
+            <button className="error-retry-btn" onClick={loadTasks}>
+              Retry
+            </button>
+          </div>
+        )}
 
         <TaskForm onAdd={handleAdd} />
 
